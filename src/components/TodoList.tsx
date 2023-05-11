@@ -5,16 +5,17 @@ import TodoItem from "./TodoItem";
 interface ITodoListProps {
     todos: ITodo[],
     title: string,
+    onChange: (todo: ITodo) => void,
 }
 
-const TodoList:FC<ITodoListProps> = ({todos, title}) => {
+const TodoList:FC<ITodoListProps> = ({todos, title, onChange}) => {
 
 
 
     return (
         <div className={"todoList"}>
             <h1>{title}</h1>
-            {todos.map((todo) => <TodoItem todo={todo} key={todo.id}/>)}
+            {todos.map((todo) => <TodoItem todo={todo} onChange={onChange} key={todo.id}/>)}
         </div>
     );
 };

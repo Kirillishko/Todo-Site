@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
+import './UI/UI.css';
 import {ITodo} from "./interfaces/ITodo";
-import {json} from "stream/consumers";
 import TodoList from "./components/TodoList";
 import MyButton from "./UI/Button/MyButton";
 
@@ -10,31 +10,41 @@ function App() {
   const [completedTodos, setCompletedTodos] = useState<ITodo[]>([]);
   const [unCompletedTodos, setUnCompletedTodos] = useState<ITodo[]>([]);
 
+  const onCompletedChange = (todo: ITodo) => {
+      setTodos(todos.map((value) => {
+          if (value.id === todo.id)
+              value.completed = !value.completed;
+
+          return value;
+      }));
+  }
+
+  const setBothTodos = () => {
+      setCompletedTodos(todos.filter(value => value.completed));
+      setUnCompletedTodos(todos.filter(value => !value.completed));
+  }
+
   useEffect(() => {
       fetch("https://jsonplaceholder.typicode.com/todos?_limit=10&_page=2")
           .then(response => response.json())
           .then(json => setTodos(json));
   }, []);
 
-    useEffect(() => {
-        setCompletedTodos(todos.filter(value => value.completed));
-        setUnCompletedTodos(todos.filter(value => !value.completed));
-    }, [completedTodos, unCompletedTodos]);
+  useEffect(() => {
+      setBothTodos();
+  }, [todos]);
 
-  // const completedTodos = todos.filter(value => value.completed);
-  // const unCompletedTodos = todos.filter(value => !value.completed);
-
-  const onCompletedChange = (todo: ITodo) => {
-      todo.completed = !todo.completed;
+  const addTodo = (todo: ITodo) => {
+      setTodos([...todos, todo]);
   }
 
   return (
     <div className="App">
-        <MyButton title={"Добавить задачу"}/>
         <div className={"todoLists"}>
-            <TodoList title={"Завершённые задачи"} todos={completedTodos}/>
-            <TodoList title={"Незавершённые задачи"} todos={unCompletedTodos}/>
+            <TodoList title={"Завершённые задачи"} todos={completedTodos} onChange={onCompletedChange}/>
+            <TodoList title={"Незавершённые задачи"} todos={unCompletedTodos} onChange={onCompletedChange}/>
         </div>
+        <MyButton title={"Добавить задачу"} onChange={addTodo}/>
     </div>
   );
 }

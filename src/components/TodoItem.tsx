@@ -3,12 +3,14 @@ import {ITodo} from "../interfaces/ITodo";
 
 interface ITodoItemProps {
     todo: ITodo,
+    onChange: (todo: ITodo) => void,
 }
 
-const TodoItem:FC<ITodoItemProps> = ({todo}) => {
+const TodoItem:FC<ITodoItemProps> = ({todo, onChange}) => {
 
-    const onChange = () => {
-        todo.completed = !todo.completed;
+    const change = () => {
+        // todo.completed = !todo.completed;
+        onChange(todo);
     }
 
     return (
@@ -19,7 +21,7 @@ const TodoItem:FC<ITodoItemProps> = ({todo}) => {
             </div>
             <div className={"todo-right"}>
                 <h5>{todo.id}</h5>
-                <input type={"checkbox"} checked={todo.completed} onChange={onChange}></input>
+                <input type={"checkbox"} checked={todo.completed} onChange={change}></input>
             </div>
         </div>
     );

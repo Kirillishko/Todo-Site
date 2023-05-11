@@ -1,16 +1,14 @@
-import React, {FC} from 'react';
-import classes from './MyButton.module.css';
+import React, {FC} from 'react'
 
 interface IMyButton {
     title: string,
-    onChange?: () => void,
+    onChange?: (params: any) => void,
 }
 
 const MyButton:FC<IMyButton> = ({title, onChange}) => {
 
-
     return (
-        <button onChange={onChange}>
+        <button onChange={onChange} className={"myButton"}>
             {title}
         </button>
     );
